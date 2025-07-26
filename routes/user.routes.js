@@ -38,7 +38,7 @@ router.post('/register',
         password
     })
      const token = jwt.sign({
-        userId : user._id,
+        userId : user._id ,
         email: user.email,
         username: user.username
      }, process.env.JWT_SECRET)
@@ -94,8 +94,8 @@ router.post('/login',
 
 
 router.get('/home', authMiddleware , ( req, res) =>{
+    console.log(req.user);
     res.render("home")
-    console.log("home page");
 })
 
 router.get('/recent' , (req , res)=>{
@@ -129,19 +129,19 @@ router.post('/file-upload', authMiddleware, upload.single('file'), async (req, r
 
     res.json({ url: result.secure_url });
     console.log (req.file);
-      const { useId , filename , fileUrl , public_id ,uploadedAt } = req.body ;
+    const { useId , filename , fileUrl , public_id ,uploadedAt } = req.body ;
 
-  const newFile = await fileModel.create({
-        userId : req.user.userId,
-        filename: result.original_filename,
-        fileUrl: result.secure_url,
-        public_id: result.public_id
-  })
+    const newFile = await fileModel.create({
+            userId : req.user.userId,
+            filename: result.original_filename,
+            fileUrl: result.secure_url,
+            public_id: result.public_id
+    })
 
-  } catch (err) {
-    console.error("Cloudinary Upload Error:", err);
-    res.status(500).json({ message: "Upload failed" });
-  }
+    } catch (err) {
+        console.error("Cloudinary Upload Error:", err);
+        res.status(500).json({ message: "Upload failed" });
+    }
 
 });
 
