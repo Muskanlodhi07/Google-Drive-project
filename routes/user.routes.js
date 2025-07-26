@@ -94,9 +94,14 @@ router.post('/login',
 // index routesss
 
 
-router.get('/home', authMiddleware , ( req, res) =>{
-    console.log(req.user);
-    res.render("home")
+router.get('/home', authMiddleware , async ( req, res) =>{
+    
+    const userfiles = await fileModel.find({
+        user : req.user.userId
+    })
+    res.render('home',{
+        files: userfiles
+    })
 })
 
 router.get('/recent' , (req , res)=>{
