@@ -64,7 +64,7 @@
       <!-- Main Content -->
       <main
         id="mainContent"
-        class=" flex justify-center items-center p-6 min-h-screen bg-gray-100 dark:bg-gray-900 relative z-10"
+        class=" justify-center items-center p-6 min-h-screen bg-gray-100 dark:bg-gray-900 relative z-10"
       >
         <div
           class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-md text-center"
@@ -82,6 +82,20 @@
           </button>
         </form>  
         </div>
+
+        <div class="files flex flex-col gap-3 mt-4 w-full" >
+          <% if (files.length === 0) { %>
+          <div>No files uploaded yet.</div>
+          <% } else { %>
+            <% files.forEach((file) => { %>
+              <div class="p-2 p-4 rounded-lg bg-white dark:bg-gray-800 cursor-pointer w-full shadow-lg">
+                <%= file.filename %>
+              </div>
+            <% }) %>
+          <% } %>
+
+        </div>
+
       </main>
     </div>
 

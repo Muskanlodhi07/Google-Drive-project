@@ -97,10 +97,10 @@ router.post('/login',
 router.get('/home', authMiddleware , async ( req, res) =>{
     
     const userfiles = await fileModel.find({
-        user : req.user.userId
+        userId :req.user.userId
     })
     res.render('home',{
-        files: userfiles
+        files : userfiles
     })
 })
 
@@ -134,12 +134,12 @@ router.post('/file-upload', authMiddleware, upload.single('file'), async (req, r
     
 
     res.json({ url: result.secure_url });
-    console.log (req.file);
+    console.log (req.file.originalname);
     const { useId , filename , fileUrl , public_id ,uploadedAt } = req.body ;
 
     const newFile = await fileModel.create({
             userId : req.user.userId,
-            filename: result.original_filename,
+            filename: req.file.originalname,
             fileUrl: result.secure_url,
             public_id: result.public_id
     })
