@@ -33,14 +33,15 @@ router.post('/register',
     const {email, username , password} = req.body;
 
     const newUser =await userModel.create({
+        
         email,
         username,
         password
     })
      const token = jwt.sign({
-        userId : user._id ,
-        email: user.email,
-        username: user.username
+        userId : newUser._id ,
+        email: newUser.email,
+        username: newUser.username
      }, process.env.JWT_SECRET)
 
     res.cookie( 'token' , token); 

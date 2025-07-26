@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema({
     username:{
         type: String,
         required: true,
-        unique : true,
+        unique : [true , 'this eamil is already in use'],
         trim : true,
         minlength :[ 3, 'username must be atleast three characters long']
     },
