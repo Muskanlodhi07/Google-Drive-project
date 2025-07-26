@@ -84,15 +84,18 @@
         </div>
 
         <div class="files flex flex-col gap-3 mt-4 w-full" >
-          <% if (files.length === 0) { %>
-          <div>No files uploaded yet.</div>
-          <% } else { %>
-            <% files.forEach((file) => { %>
-              <div class="p-2 p-4 rounded-lg bg-white dark:bg-gray-800 cursor-pointer w-full shadow-lg">
-                <%= file.filename %>
-              </div>
-            <% }) %>
-          <% } %>
+        <% files.forEach(file => { %>
+          <div class="file-card">
+            <div class="p-2 p-4 rounded-lg bg-white dark:bg-gray-800 cursor-pointer w-full shadow-lg">
+              <%= file.filename %>
+            </div>
+            <a href="<%= file.fileUrl %>" target="_blank">Download</a>
+            <form action="/user/delete-file/<%= file._id %>" method="POST" style="display:inline;">
+              <button type="submit" onclick="return confirm('Delete this file?')">🗑️ Delete</button>
+            </form>
+          </div>
+        <% }) %>
+
 
         </div>
 

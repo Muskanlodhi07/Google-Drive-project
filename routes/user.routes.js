@@ -151,4 +151,23 @@ router.post('/file-upload', authMiddleware, upload.single('file'), async (req, r
 
 });
 
+router.post('/delete-file/:id', async (req, res) => {
+  try {
+    const file = await FileModel.findById(req.params.id);
+
+    if (!file) return res.status(404).send("File not found");
+
+    // Step 1: Delete from Cloudinary
+    await cloudinary.uploader.destroy(file.public_id);
+
+    // Step 2: Delete from MongoDB
+    await FileModel.findByIdAndDelete(req.params.id);
+
+    res.redirect("/dashboard"); // or wherever you list the files
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Something went wrong");
+  }
+});
+
 module.exports = router;
