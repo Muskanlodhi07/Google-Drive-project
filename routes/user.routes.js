@@ -87,7 +87,7 @@ router.post('/login',
 
     res.cookie( 'token' , token);
     
-    res.render("home");
+    res.redirect("/user/home");
 })
 
 
@@ -99,6 +99,7 @@ router.get('/home', authMiddleware , async ( req, res) =>{
     const userfiles = await fileModel.find({
         userId :req.user.userId
     })
+    console.log(userfiles);
     res.render('home',{
         files : userfiles
     })
@@ -133,8 +134,8 @@ router.post('/file-upload', authMiddleware, upload.single('file'), async (req, r
     const result = await uploadToCloudinary();
     
 
-    res.json({ url: result.secure_url });
-    console.log (req.file.originalname);
+    res.redirect("/user/home");
+    console.log (req.file.originalname); 
     const { useId , filename , fileUrl , public_id ,uploadedAt } = req.body ;
 
     const newFile = await fileModel.create({
