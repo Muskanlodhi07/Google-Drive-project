@@ -100,7 +100,6 @@ router.get('/home', authMiddleware , async ( req, res) =>{
         userId :req.user.userId,
         deleted: false
     })
-    console.log(userfiles);
     res.render('home',{
         files : userfiles
     })
@@ -110,7 +109,6 @@ router.get('/recent' ,authMiddleware, async (req , res)=>{
     const userfiles = await fileModel.find({
     userId :req.user.userId
     })
-    console.log(userfiles);
     res.render('recent',{
         files : userfiles
     })
