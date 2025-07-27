@@ -97,7 +97,8 @@ router.post('/login',
 router.get('/home', authMiddleware , async ( req, res) =>{
     
     const userfiles = await fileModel.find({
-        userId :req.user.userId
+        userId :req.user.userId,
+        deleted: false
     })
     console.log(userfiles);
     res.render('home',{
@@ -105,13 +106,20 @@ router.get('/home', authMiddleware , async ( req, res) =>{
     })
 })
 
-router.get('/recent' , (req , res)=>{
-    res.render("recent")
+router.get('/recent' ,authMiddleware, async (req , res)=>{
+    const userfiles = await fileModel.find({
+    userId :req.user.userId
+    })
+    console.log(userfiles);
+    res.render('recent',{
+        files : userfiles
+    })
 })
 
-router.get('/bin' , (req , res)=>{
-    res.render("bin")
-})
+router.get('/bin', authMiddleware, async (req, res) => {
+  const deletedFiles = await fileModel.find({ owner: req.user._id, deleted: true });
+  res.render('bin', { deletedFiles });
+});
 
 const cloudinaryy= require('../config/cloudinary');
 
@@ -135,7 +143,6 @@ router.post('/file-upload', authMiddleware, upload.single('file'), async (req, r
     
 
     res.redirect("/user/home");
-    console.log (req.file.originalname); 
     const { useId , filename , fileUrl , public_id ,uploadedAt } = req.body ;
 
     const newFile = await fileModel.create({
@@ -152,6 +159,25 @@ router.post('/file-upload', authMiddleware, upload.single('file'), async (req, r
 
 });
 
+// POST /file/delete/:id
+router.post('/file/delete/:id', authMiddleware, async (req, res) => {
+  try {
+    const file = await fileModel.findById(req.params.id);
+      await fileModel.findByIdAndDelete(req.params.id);
+       // Hard delete
+       
+    // Step 1: Delete from Cloudinary
+    await cloudinary.uploader.destroy(file.public_id);
+    
+    res.redirect('/user/bin');
+  } catch (err) {
+    res.status(500).send('Error deleting file');
+     console.log(err);
+  }
+ 
+});
+
+
 router.post('/delete-file/:id', async (req, res) => {
   console.log("🔥 DELETE ROUTE HIT");
   try {
@@ -159,11 +185,11 @@ router.post('/delete-file/:id', async (req, res) => {
 
     if (!file) return res.status(404).send("File not found");
 
-    // Step 1: Delete from Cloudinary
-    await cloudinary.uploader.destroy(file.public_id);
-
     // Step 2: Delete from MongoDB
-    await fileModel.findByIdAndDelete(req.params.id);
+    await fileModel.findByIdAndUpdate(req.params.id , {
+        deleted: true,
+        deletedAt: new Date()
+    });
 
     res.redirect("/user/home"); // or wherever you list the files
   } catch (err) {
@@ -171,5 +197,18 @@ router.post('/delete-file/:id', async (req, res) => {
     res.status(500).send("Something went wrong");
   }
 });
+// POST /file/restore/:id
+router.post('/file/restore/:id', authMiddleware, async (req, res) => {
+  try {
+    await fileModel.findByIdAndUpdate(req.params.id, {
+      deleted: false,
+      deletedAt: null
+    });
+    res.redirect('/user/bin');
+  } catch (err) {
+    res.status(500).send('Error restoring file');
+  }
+});
+
 
 module.exports = router;

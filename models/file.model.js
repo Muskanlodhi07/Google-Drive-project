@@ -21,7 +21,12 @@ const fileSchema = new mongoose.Schema({
   uploadedAt: {
     type: Date,
     default: Date.now
-  }
+  },
+  deleted: {
+    type: Boolean,
+    default: false,
+  },
+  deletedAt: Date,
 });
 
 module.exports = mongoose.model('File', fileSchema);
