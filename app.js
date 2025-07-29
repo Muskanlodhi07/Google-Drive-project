@@ -18,6 +18,8 @@ app.use(express.urlencoded({ extended: true }));
 
  
 app.use("/user" , userRouter);
+app.use(express.static('public'));
+
 
 
 app.listen(3000, () => {

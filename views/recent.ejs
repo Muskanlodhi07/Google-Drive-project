@@ -1,83 +1,77 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en" class="light">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Home</title>
+    <title>Insights - Financial Advice</title>
     <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/feather-icons"></script>
     <script>
+      // Dark Mode Toggle
       tailwind.config = {
         darkMode: 'class',
       };
     </script>
   </head>
-  <body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white relative">
-    <!-- Top Navbar -->
-    <header
-      class="flex items-center justify-between px-4 py-3 border-b border-gray-300 dark:border-gray-700 relative z-20 bg-white dark:bg-gray-900"
-    >
-      <div class="flex items-center gap-3 w-full">
-        <!-- Sidebar Toggle Button (Mobile Only) -->
-        <button id="menuBtn" onclick="toggleSidebar()" class="text-2xl lg:hidden">
-          ☰
+  <body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300">
+    <!-- Header -->
+    <header class="bg-[#FFD69D] dark:bg-gray-800 px-6 py-4 flex justify-between items-center">
+      <div class="text-2xl font-bold">Pookie's Pocket</div>
+      <div class="flex gap-4 items-center">
+        <button
+          onclick="document.documentElement.classList.toggle('dark')"
+          class="dark:bg-gray-700 text-black dark:text-white px-2 py-1 rounded-md dark:border-gray-600"
+        >
+        <i data-feather="clock" class="w-5 h-5"></i>
         </button>
-
-        <!-- Search Bar -->
-        <input
-          type="text"
-          placeholder="Search in Drive"
-          class="flex-grow min-w-screen rounded-full px-4 py-2 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 focus:outline-none text-sm"
-        />
+        <button class="border border-gray-700 text-black dark:text-white px-3 py-1 rounded-md dark:border-gray-400">
+          Login
+        </button>
       </div>
-
-      <!-- Login Button Toggle button-->
-      
-       <button onclick="document.documentElement.classList.toggle('dark')">
-            <i data-feather="clock" class="w-5 h-5 cursor-pointer m-3"></i>
-        </button>
-      <a href="/user/register">
-      <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-4 py-2.5 text-center me-2 mb-1 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">login</button>
-      </a>
     </header>
 
-    <!-- Main Layout -->
-    <div class="relative flex flex-col lg:flex-row">
-      <!-- Overlay Sidebar -->
-      <aside
-        id="sidebar"
-        class="fixed top-0 left-0 z-30 min-h-screen w-64 bg-white dark:bg-gray-800 p-4 border-r border-gray-300 dark:border-gray-700 transform -translate-x-full transition-transform duration-300 lg:relative lg:translate-x-0 lg:block"
-      >
-        <h2 class="text-xl font-bold mb-5">📁 Drive</h2>
-      <nav class="flex-1 space-y-2 text-sm font-medium">
-      <a href="/user/home" class="flex items-center gap-2 p-2 rounded hover:bg-blue-100 dark:hover:bg-gray-700 text-blue-600 dark:text-blue-400">
-        <i data-feather="home" class="w-4 h-4"></i> Home
-      </a>
-      <a href="#" class="flex items-center gap-2 p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">
-        <i data-feather="folder" class="w-4 h-4"></i> My Drive
-      </a>
-      <a href="#" class="flex items-center gap-2 p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">
-        <i data-feather="users" class="w-4 h-4"></i> Shared with me
-      </a>
-      <a href="/user/recent" class="flex items-center gap-2 p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">
-        <i data-feather="clock" class="w-4 h-4"></i> Recent
-      </a>
-      <a href="#" class="flex items-center gap-2 p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">
-        <i data-feather="star" class="w-4 h-4"></i> Starred
-      </a>
-      <a href="/user/bin" class="flex items-center gap-2 p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700">
-        <i data-feather="trash-2" class="w-4 h-4"></i> Bin
-      </a>
-    </nav>
+    <!-- Hero -->
+    <section class="bg-[#FFD69D] dark:bg-gray-800 py-20 text-center">
+      <h1 class="text-4xl font-bold">  Your Files. Your Control.</h1>
+    </section>
 
-      </aside>
+    <!-- Insights Section -->
+    <section class="py-10 px-6 max-w-6xl mx-auto">
+      <h2 class="text-3xl font-semibold text-center mb-2">Our Insights</h2>
+      <p class="text-center text-gray-600 dark:text-gray-300 mb-6">
+        Get all your financial questions answered with articles from finance gurus.
+      </p>
 
-      <!-- Main Content -->
-      <main
-        id="mainContent"
-        class=" justify-center items-center p-6 min-h-screen bg-gray-100 dark:bg-gray-900 relative z-10"
-      >
+      <!-- Category Filter -->
+      <div class="flex flex-wrap justify-center gap-2 mb-8">
+         <a href="/user/home" ><button class="px-4 py-1 border rounded-md bg-blue-900 text-white">Home</button></a>
+        <a href="/user/recent"><button class="px-4 py-1 border rounded-md bg-white dark:bg-gray-700">Recent</button></a>
+        <a href="/user/bin"><button class="px-4 py-1 border rounded-md bg-white dark:bg-gray-700">Bin</button></a>
+        <button class="px-4 py-1 border rounded-md bg-white dark:bg-gray-700">About</button>
+        <button class="px-4 py-1 border rounded-md bg-white dark:bg-gray-700">Shared with me</button>
+      </div>
+
+      <!-- upload box -->
+          <section
+            class="bg-blue-100 flex flex-wrap m-6 py-10 px-6 max-w-6xl mx-auto justify-center dark:bg-gray-800 rounded-lg shadow-lg w-full max-w-md text-center"
+          >
+        <form action="/user/file-upload"
+        method="post"
+        enctype="multipart/form-data"
+        >
+        <h2 class="text-lg font-semibold mb-4 ">Upload file</h2>
+          <input type="file" id="fileInput" name="file" class="mb-4 text-sm text-gray-700 dark:text-white" />
+          <button onclick="upload(event)"
+            class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">
+            upload
+          </button>
+
+        </form>  
+    </section>
+
+      <!-- Files section -->
+      <div id="uploadCards" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-gray-700 dark:text-white p-4 rounded-md">
           <div class="files flex flex-col gap-3 mt-4 w-full" >
           <% files.forEach(file => { %>
             <div class="file-card">
@@ -93,44 +87,47 @@
             </div>
           <% }) %>
         </div>
+      </div>  
 
-      </main>
+    <!-- Save Tax Section -->
+  <section class="bg-gray-100 py-12 px-4 dark:text-gray-700">
+    <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between">
+      <img src="https://cdn-icons-png.flaticon.com/512/2922/2922688.png" alt="selfie" class="w-40 mb-4 md:mb-0" />
+      <div class="text-center md:text-left">
+        <h2 class="text-2xl font-bold mb-2">Save tax in 2 minutes</h2>
+        <p class="mb-4">Saving for 80c is like taking a selfie literally. Try it for yourself</p>
+        <button class="bg-[#173A59] text-white px-6 py-2 rounded">GET STARTED</button>
+      </div>
     </div>
+  </section>
 
-    <!-- JavaScript -->
-    <script>
-      const sidebar = document.getElementById("sidebar");
-      const mainContent = document.getElementById("mainContent");
-      const menuBtn = document.getElementById("menuBtn");
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 px-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-center md:text-left">
+        <div>
+          <h4 class="font-semibold mb-2">Subscribe to Insights</h4>
+          <p class="text-sm text-gray-300 mb-2">Get best of insights delivered to your inbox</p>
+          <button class="bg-white text-black px-4 py-1 rounded-md">Subscribe</button>
+        </div>
+        <div>
+          <h4 class="font-semibold mb-2">Have a Question?</h4>
+          <p class="text-sm text-gray-300 mb-2">Get advice from experts, for free, in 48 hours</p>
+          <button class="bg-white text-black px-4 py-1 rounded-md">Post your Thought</button>
+        </div>
+      </div>
+      <div class="text-center mt-6 text-gray-400 text-sm">
+        &copy; 2025 Insights. All rights reserved.
+      </div>
+    </footer>
+  </body>
 
-      function toggleSidebar() {
-        sidebar.classList.toggle("-translate-x-full");
-      }
+  <script>feather.replace()</script>
+  <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
 
-      // Click outside to close (only for small screens)
-      document.addEventListener("click", function (event) {
-        const isClickInsideSidebar = sidebar.contains(event.target);
-        const isClickOnMenuBtn = menuBtn.contains(event.target);
-        const isSidebarVisible = !sidebar.classList.contains("-translate-x-full");
 
-        // If clicked outside sidebar AND it's visible AND not on button
-        if (!isClickInsideSidebar && !isClickOnMenuBtn && isSidebarVisible && window.innerWidth < 1024) {
-          sidebar.classList.add("-translate-x-full");
-        }
-      });
-    </script>
-    <script>feather.replace()</script>
-
-<!-- Toggle Dark Mode (Optional button for testing) -->
 <script>
-  // Toggle with browser setting or manually
-  if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    document.documentElement.classList.add('dark')
-  }
-</script>
-<script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
-<script>
-  async function upload() {
+
+  async function upload(event) {
     const file = document.getElementById('fileInput').files[0];
     const formData = new FormData();
     formData.append('file', file);
@@ -140,11 +137,9 @@
   credentials: 'include', // ✅ this sends the cookie!
   body: formData
   });
-
-    const data = await res.json();
-    alert("Uploaded URL: " + data.url);
   }
 </script>
 
-  </body>
+
+
 </html>
