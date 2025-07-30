@@ -6,6 +6,11 @@
     <title>PinShare - Beautiful File Sharing</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+
     <script>
         tailwind.config = {
             theme: {
@@ -184,7 +189,7 @@
                 <li><a href="/user/recent" class="nav-item py-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Recent</a></li>
                 <li><a href="#" class="nav-item py-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Shared</a></li>
                 <li><a href="#" class="nav-item py-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Collections</a></li>
-                <li><a href="#" class="nav-item py-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Favorites</a></li>
+                <li><a href="/user/favorites" class="nav-item py-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Favorites</a></li>
             </ul>
         </nav>
     </header>
@@ -220,8 +225,8 @@
                     </button>
                     <input id="dropzone-file" name="file" type="file" class="hidden" />
                     </label>
-                </div> 
-            </form>
+                </form> 
+            </div>
 
             </div>
         </div>
@@ -245,9 +250,11 @@
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <!-- Collection 1 -->
-                <% files.forEach(file => { %>
+                <%files.forEach(file => { %>
+
                 <div class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow">
                     <div class="h-40 bg-gradient-to-r from-pink-500 to-purple-500 relative">
+                        <!-- Favorite Button -->
                         <div class="absolute inset-0 flex items-center justify-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-white/80" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -256,7 +263,7 @@
                     </div>
                     <div class="p-5">
                         <h3 class="font-bold text-lg mb-2"><%= file.filename %></h3>
-                        <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">date&time</p>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm mb-4"><%= file.uploadedAt %></p>
                         <a href="<%= file.fileUrl %>" download="file.jpg"  target="_blank"   class="inline-block px-4 py-2 mt-3 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600">Download</a>
                         <form action="/user/delete-file/<%= file._id %>" method="POST" style="display:inline;">
                             <button type="submit" onclick="return confirm('Delete this file?')" 
@@ -266,51 +273,13 @@
                     </div>   
                 </div>
                 <% }) %>
-                <!-- Collection 2 -->
-                <div class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow">
-                    <div class="h-40 bg-gradient-to-r from-blue-500 to-teal-500 relative">
-                        <div class="absolute inset-0 flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-white/80" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="p-5">
-                        <h3 class="font-bold text-lg mb-2">Documents</h3>
-                        <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">85 items</p>
-                        <div class="flex -space-x-2">
-                            <div class="w-8 h-8 rounded-full bg-purple-500 border-2 border-white dark:border-gray-800 flex items-center justify-center text-white text-xs">TS</div>
-                            <div class="w-8 h-8 rounded-full bg-red-500 border-2 border-white dark:border-gray-800 flex items-center justify-center text-white text-xs">AK</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Collection 3 -->
-                <div class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow">
-                    <div class="h-40 bg-gradient-to-r from-amber-500 to-red-500 relative">
-                        <div class="absolute inset-0 flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-white/80" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="p-5">
-                        <h3 class="font-bold text-lg mb-2">Videos</h3>
-                        <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">42 items</p>
-                        <div class="flex -space-x-2">
-                            <div class="w-8 h-8 rounded-full bg-indigo-500 border-2 border-white dark:border-gray-800 flex items-center justify-center text-white text-xs">RW</div>
-                            <div class="w-8 h-8 rounded-full bg-emerald-500 border-2 border-white dark:border-gray-800 flex items-center justify-center text-white text-xs">PL</div>
-                            <div class="w-8 h-8 rounded-full bg-orange-500 border-2 border-white dark:border-gray-800 flex items-center justify-center text-white text-xs">+3</div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </section>
         
         <!-- Recent Uploads - Pinterest Style -->
         <section>
             <div class="flex items-center mb-8">
-                <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Recent Uploads</h2>
+                <h2 class="text-2xl font-bold text-gray-800 text-gray-800">Recent Uploads</h2>
             </div>
             
             <!-- Pinterest-style Masonry Grid -->
@@ -418,17 +387,48 @@
 
 
 <script>
-  async function upload(event) {
-    const file = document.getElementById('fileInput').files[0];
-    const formData = new FormData();
-    formData.append('file', file);
+async function upload(event) {
+  event.preventDefault(); // prevent reload
 
-    const res = await fetch('/upload', {
-  method: 'POST',
-  credentials: 'include', // ✅ this sends the cookie!
-  body: formData
-  });
+  const file = document.getElementById('dropzone-file').files[0];
+
+  if (!file) {
+    alert("Please select a file.");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append('file', file);
+
+  try {
+    const res = await fetch('/user/file-upload', {
+      method: 'POST',
+      credentials: 'include',
+      body: formData
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      alert("✅ Upload successful!");
+      window.location.href = "/user/home"; // redirect if needed
+    } else {
+      alert("❌ Upload failed: " + data.message);
+    }
+
+  } catch (error) {
+    alert("❌ Error occurred: " + error.message);
+  }
 }
-</script>    
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96679284f035bcff',t:'MTc1MzczOTIxOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+
+</script>
+
+ 
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96679284f035bcff',t:'MTc1MzczOTIxOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+
+
+
+
+</body>
 </html>
+

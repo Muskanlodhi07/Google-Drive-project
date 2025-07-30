@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2 class="text-2xl font-bold mb-4">Your Favorite Files</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+  <% files.forEach(file => { %>
+    <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow">
+      <h3 class="text-lg font-semibold mb-2"><%= file.filename %></h3>
+      <a href="<%= file.fileUrl %>" class="text-blue-500 underline" download>Download</a>
+    </div>
+  <% }) %>
+</div>
+
+</body>
+</html>

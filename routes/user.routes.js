@@ -31,7 +31,6 @@ router.post('/register',
     }
 
     const {email, username , password} = req.body;
-
     const newUser =await userModel.create({
         
         email,
@@ -46,7 +45,8 @@ router.post('/register',
 
     res.cookie( 'token' , token); 
 
-    res.render("home");
+    res.redirect("/user/home");
+    console.log(newUser);
 })
 
 router.get('/login', ( req , res) => {
@@ -100,8 +100,12 @@ router.get('/home', authMiddleware , async ( req, res) =>{
         userId :req.user.userId,
         deleted: false
     })
+        const newuser = await userModel.find({
+        userId :req.user.userId,
+    })
     res.render('home',{
-        files : userfiles
+        files : userfiles,
+        user : newuser
     })
 })
 
@@ -115,7 +119,10 @@ router.get('/recent' ,authMiddleware, async (req , res)=>{
 })
 
 router.get('/bin', authMiddleware, async (req, res) => {
-  const deletedFiles = await fileModel.find({ owner: req.user._id, deleted: true });
+  const deletedFiles = await fileModel.find({ 
+    userId: req.user.userId,
+    deleted: true
+});
   res.render('bin', { deletedFiles });
 });
 
@@ -123,39 +130,35 @@ const cloudinaryy= require('../config/cloudinary');
 
 router.post('/file-upload', authMiddleware, upload.single('file'), async (req, res) => {
   try {
-    const buffer = req.file.buffer;
-
-    const uploadToCloudinary = () =>
-      new Promise((resolve, reject) => {
-        const stream = cloudinaryy.uploader.upload_stream(
-          { resource_type: 'auto' },
-          (error, result) => {
-            if (error) return reject(error);
-            return resolve(result);
-          }
-        );
-        stream.end(buffer); // this sends the file
-      });
-
-    const result = await uploadToCloudinary();
-    
-
-    res.redirect("/user/home");
-    const { useId , filename , fileUrl , public_id ,uploadedAt } = req.body ;
-
-    const newFile = await fileModel.create({
-            userId : req.user.userId,
-            filename: req.file.originalname,
-            fileUrl: result.secure_url,
-            public_id: result.public_id
-    })
-
-    } catch (err) {
-        console.error("Cloudinary Upload Error:", err);
-        res.status(500).json({ message: "Upload failed" });
+    if (!req.file || !req.file.buffer) {
+      return res.status(400).json({ message: "No file uploaded" });
     }
 
+    const result = await new Promise((resolve, reject) => {
+      cloudinary.uploader.upload_stream(
+        { resource_type: 'auto' },
+        (error, result) => {
+          if (error) return reject(error);
+          return resolve(result);
+        }
+      ).end(req.file.buffer);
+    });
+
+    await fileModel.create({
+      userId: req.user.userId,
+      filename: req.file.originalname,
+      fileUrl: result.secure_url,
+      public_id: result.public_id
+    });
+
+    return res.status(200).json({ message: "Upload successful", url: result.secure_url });
+
+  } catch (err) {
+    console.error("Upload failed:", err);
+    return res.status(500).json({ message: "Upload failed", error: err.message });
+  }
 });
+
 
 // POST /file/delete/:id
 router.post('/file/delete/:id', authMiddleware, async (req, res) => {
@@ -207,6 +210,5 @@ router.post('/file/restore/:id', authMiddleware, async (req, res) => {
     res.status(500).send('Error restoring file');
   }
 });
-
 
 module.exports = router;
