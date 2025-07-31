@@ -67,11 +67,11 @@
             left: 0;
             width: 0;
             height: 2px;
-            background-color: #0ea5e9;
+            background-color: #7242c4;
             transition: width 0.3s ease;
         }
         .dark .nav-item::after {
-            background-color: #38bdf8;
+            background-color: #7242c4;
         }
         .nav-item:hover::after, .nav-item.active::after {
             width: 100%;
@@ -146,16 +146,6 @@
                 <h1 class="text-gray-800 dark:text-white text-2xl font-bold">FileNest</h1>
             </div>
             
-            <!-- Search Bar -->
-            <!-- <div class="hidden md:block flex-grow max-w-md mx-8">
-                <div class="relative">
-                    <input type="text" placeholder="Search..." class="w-full py-2 pl-10 pr-4 rounded-full bg-gray-100 dark:bg-gray-800 border-none focus:ring-2 focus:ring-primary-300 dark:focus:ring-primary-700 focus:outline-none">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 absolute left-3 top-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                </div>
-            </div> -->
-            
             <!-- Dark Mode Toggle -->
             <div class="flex items-center space-x-4">
                 <button onclick="document.documentElement.classList.toggle('dark')"
@@ -167,38 +157,30 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
                     </svg>
                 </button>
-                <button class="md:hidden p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                </button>
             </div>
         </div>
         
         <!-- Navigation -->
         <nav class="container mx-auto px-4 py-3 border-t border-gray-200 dark:border-gray-700 overflow-x-auto">
             <ul class="flex space-x-8 whitespace-nowrap">
-                <li><a href="/user/home" class="nav-item activenav-item py-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Home</a></li>
-                <li><a href="/user/about" class="nav-item py-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">About</a></li>
-                <li><a href="/user/bin" class="nav-item py-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Bin</a></li>
-                <li><a href="/user/recent" class="nav-item py-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Recent</a></li>
-                <li><a href="#" class="nav-item py-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Shared</a></li>
-                <li><a href="#" class="nav-item py-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Collections</a></li>
-                <li><a href="#" class="nav-item py-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Favorites</a></li>
+                <li><a href="/user/home" class="nav-item activenav-item py-2 text-gray-600 dark:text-gray-300 hover:text-[#7242c4] dark:hover:text-primary-400 transition-colors">Home</a></li>
+                <li><a href="/user/about" class="nav-item py-2 text-gray-600 dark:text-gray-300 hover:text-[#7242c4] dark:hover:text-primary-400 transition-colors">About</a></li>
+                <li><a href="/user/bin" class="nav-item py-2 text-gray-600 dark:text-gray-300 hover:text-[#7242c4] dark:hover:text-primary-400 transition-colors">Bin</a></li>
+                <li><a href="/user/recent" class="nav-item py-2 text-gray-600 dark:text-gray-300 hover:text-[#7242c4] dark:hover:text-primary-400 transition-colors">Recent</a></li>
+                <li><a href="#" class="nav-item py-2 text-gray-600 dark:text-gray-300 hover:text-[#7242c4] dark:hover:text-primary-400 transition-colors">Shared</a></li>
+                <li><a href="#" class="nav-item py-2 text-gray-600 dark:text-gray-300 hover:text-[#7242c4] dark:hover:text-primary-400 transition-colors">Collections</a></li>
+                <li><a href="/user/favorite" class="nav-item py-2 text-gray-600 dark:text-gray-300 hover:text-[#7242c4] dark:hover:text-primary-400 transition-colors">Favorites</a></li>
             </ul>
         </nav>
     </header>
 
     <!-- Hero Section -->
-    <section class="bg-[#0ea5e9] py-12 md:py-20 px-4 bg-gradient-to-br from-primary-500 to-primary-700 text-white relative overflow-hidden">
+    <section class="bg-[#7242c4] py-12 md:py-20 px-4 bg-gradient-to-br from-primary-500 to-primary-700 text-white relative overflow-hidden">
         <div class="absolute inset-0 bg-pattern opacity-10"></div>
         <div class="container mx-auto relative z-10">
             <div class="max-w-2xl mx-auto text-center">
-                <h1 class="text-3xl md:text-5xl font-bold mb-2">Share Your Inspiration</h1>
-                <p class="text-lg md:text-xl text-primary-100">Upload, organize, and share your files beautifully. Discover new ideas from others.</p>
-                     <svg xmlns="http://www.w3.org/2000/svg" class=" h-16 w-16 mx-auto text-primary-500 text-[#0ea5e9] mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                    </svg>               
+                <h1 class="text-3xl mt-6 md:text-5xl font-bold mb-2">Share Your Inspiration</h1>
+                <p class="text-lg mb-10 md:text-xl text-primary-100">Upload, organize, and share your files beautifully. Discover new ideas from others.</p>          
             </div>
         </div>
         

@@ -72,11 +72,11 @@
             left: 0;
             width: 0;
             height: 2px;
-            background-color: #0ea5e9;
+            background-color: #F18AA8;
             transition: width 0.3s ease;
         }
         .dark .nav-item::after {
-            background-color: #38bdf8;
+            background-color: #F18AA8;
         }
         .nav-item:hover::after, .nav-item.active::after {
             width: 100%;
@@ -106,7 +106,7 @@
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23334155' fill-opacity='0.4'%3E%3Cpath opacity='.5' d='M96 95h4v1h-4v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9zm-1 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9z'/%3E%3Cpath d='M6 5V0H5v5H0v1h5v94h1V6h94V5H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
         }
         .pin-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: transform 0.2s ease, box-shadow 0.3s ease;
         }
         .pin-card:hover {
             transform: translateY(-5px);
@@ -165,24 +165,19 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
                     </svg>
                 </button>
-                <button class="md:hidden p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                </button>
             </div>
         </div>
         
         <!-- Navigation -->
         <nav class="container mx-auto px-4 py-3 border-t border-gray-200 dark:border-gray-700 overflow-x-auto">
             <ul class="flex space-x-8 whitespace-nowrap">
-                <li><a href="/user/home" class="nav-item activenav-item py-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Home</a></li>
-                <li><a href="/user/about" class="nav-item py-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">About</a></li>
-                <li><a href="/user/bin" class="nav-item py-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Bin</a></li>
-                <li><a href="/user/recent" class="nav-item py-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Recent</a></li>
-                <li><a href="#" class="nav-item py-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Shared</a></li>
-                <li><a href="#" class="nav-item py-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Collections</a></li>
-                <li><a href="/user/favorite" class="nav-item py-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Favorites</a></li>
+                <li><a href="/user/home" class="nav-item activenav-item py-2 text-gray-600 dark:text-gray-300 hover:text-[#f6225e] dark:hover:text-primary-400 transition-colors">Home</a></li>
+                <li><a href="/user/about" class="nav-item py-2 text-gray-600 dark:text-gray-300 hover:text-[#f6225e] dark:hover:text-primary-400 transition-colors">About</a></li>
+                <li><a href="/user/bin" class="nav-item py-2 text-gray-600 dark:text-gray-300 hover:text-[#f6225e] dark:hover:text-primary-400 transition-colors">Bin</a></li>
+                <li><a href="/user/recent" class="nav-item py-2 text-gray-600 dark:text-gray-300 hover:text-[#f6225e] dark:hover:text-primary-400 transition-colors">Recent</a></li>
+                <li><a href="#" class="nav-item py-2 text-gray-600 dark:text-gray-300 hover:text-[#f6225e] dark:hover:text-primary-400 transition-colors">Shared</a></li>
+                <li><a href="#" class="nav-item py-2 text-gray-600 dark:text-gray-300 hover:text-[#f6225e] dark:hover:text-primary-400 transition-colors">Collections</a></li>
+                <li><a href="/user/favorite" class="nav-item py-2 text-gray-600 dark:text-gray-300 hover:text-[#f6225e] dark:hover:text-primary-400 transition-colors">Favorites</a></li>
             </ul>
         </nav>
     </header>
@@ -206,7 +201,7 @@
                 <div class="masonry-item relative">
                 <div class="pin-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md">
                     <div class="relative">
-                    <div class="bg-gradient-to-br from-purple-400 to-indigo-600 h-48 flex items-center justify-center">
+                    <div class="bg-gradient-to-br from-[#f6225e] to-pink-200 h-48 flex items-center justify-center">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 text-white/80" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
@@ -217,7 +212,7 @@
                     <p class="text-sm text-gray-500 dark:text-gray-400 mb-3"><%= file.uploadedAt %></p>
                     <div class="flex justify-between items-center">
                         <div class="flex space-x-2">
-                        <a href="<%= file.fileUrl %>" download class="inline-block px-4 py-2 mt-3 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600">View</a>
+                        <a href="<%= file.fileUrl %>" download class="inline-block px-4 py-2 mt-3 bg-[#f6225e] text-white font-semibold rounded-lg shadow-md hover:bg-blue-600">View</a>
                         </div>
                     </div>
                     </div>

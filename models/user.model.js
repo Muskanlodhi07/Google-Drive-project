@@ -20,12 +20,10 @@ const userSchema = new mongoose.Schema({
         trim : true,
         minlength :[ 6, 'password must be atleast six characters long']
     },
-    favorites: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'File' // This should match your file model name
-    }
-  ]
+  favorites: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'File'
+  }]
 })
 
 const User = mongoose.model('User', userSchema)
