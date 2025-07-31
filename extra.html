@@ -375,3 +375,33 @@
           </div>
         </div> 
         <% }) %>
+
+
+<!-- favorite page code -->
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<h2 class="text-2xl font-bold mb-4">Your Favorite Files</h2>
+
+<% if (!files || files.length === 0) { %>
+  <p class="text-gray-500">No favorites yet.</p>
+<% } else { %>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <% files.forEach(file => { %>
+      <div class="bg-white rounded-lg shadow p-4">
+        <h3 class="font-semibold"><%= file.filename %></h3>
+        <p class="text-sm text-gray-600"><%= file.uploadedAt %></p>
+        <a href="<%= file.fileUrl %>" target="_blank" class="text-blue-500 underline">View</a>
+      </div>
+    <% }) %>
+  </div>
+<% } %>
+
+
+</body>
+</html>

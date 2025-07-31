@@ -94,20 +94,29 @@ router.post('/login',
 // index routesss
 
 
-router.get('/home', authMiddleware , async ( req, res) =>{
-    
-    const userfiles = await fileModel.find({
-        userId :req.user.userId,
-        deleted: false
-    })
-        const newuser = await userModel.find({
-        userId :req.user.userId,
-    })
-    res.render('home',{
-        files : userfiles,
-        user : newuser
-    })
-})
+router.get('/home', authMiddleware, async (req, res) => {
+  const userfiles = await fileModel.find({
+    userId: req.user.userId,
+    deleted: false
+  });
+
+  // fetch user by _id and populate the actual favorite file documents
+  const newuser = await userModel.findById(req.user.userId).populate('favorites');
+
+  // normalize favorites to string IDs so .includes works in EJS
+  const userForTemplate = {
+    ...newuser.toObject(),
+    favorites: Array.isArray(newuser.favorites)
+      ? newuser.favorites.map(f => f._id.toString())
+      : []
+  };
+
+  res.render('home', {
+    files: userfiles,
+    user: userForTemplate
+  });
+});
+
 
 router.get('/recent' ,authMiddleware, async (req , res)=>{
     const userfiles = await fileModel.find({
@@ -210,5 +219,82 @@ router.post('/file/restore/:id', authMiddleware, async (req, res) => {
     res.status(500).send('Error restoring file');
   }
 });
+
+router.post('/toggle-favorite/:fileId', authMiddleware, async (req, res) => {
+  try {
+    const userId = req.user?.userId;
+    const { fileId } = req.params;
+
+    if (!userId) return res.status(401).json({ success: false, message: 'Unauthorized' });
+
+    const user = await userModel.findById( userId ).exec();
+    if (!user) return res.status(404).json({ success: false, message: 'User not found' });
+
+    // Ensure favorites array exists
+    if (!Array.isArray(user.favorites)) user.favorites = [];
+
+    const idx = user.favorites.findIndex(fav => fav.toString() === fileId);
+    let isNowFavorite;
+    if (idx > -1) {
+      // remove
+      user.favorites.splice(idx, 1);
+      isNowFavorite = false;
+    } else {
+      user.favorites.push(fileId);
+      isNowFavorite = true;
+    }
+
+    await user.save();
+
+    res.json({ success: true, isFavorite: isNowFavorite });
+  } catch (err) {
+    console.error('toggle-favorite error', err);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
+// JSON endpoint for current favorites (can be polled by favorites page)
+router.get('/favorite-json', authMiddleware, async (req, res) => {
+  try {
+    const userId = req.user?.userId || req.session?.userId;
+    if (!userId) return res.status(401).json({ success: false, message: 'Unauthorized' });
+
+    const user = await userModel.findOne({ userId }).populate('favorites').exec();
+    if (!user) return res.status(404).json({ success: false, message: 'User not found' });
+
+    const favorites = Array.isArray(user.favorites)
+      ? user.favorites.map(f => ({
+          _id: f._id,
+          filename: f.filename || f.name || '',
+          fileUrl: f.fileUrl || '',
+          uploadedAt: f.uploadedAt || ''
+        }))
+      : [];
+
+    res.json({ success: true, favorites });
+  } catch (err) {
+    console.error('favorite-json error', err);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
+// Render favorites page
+router.get('/favorite', authMiddleware, async (req, res) => {
+  try {
+    const userId = req.user?.userId;
+    if (!userId) return res.status(401).send('Unauthorized');
+
+    // Get user by _id and populate the favorites array
+    const user = await userModel.findById(userId).populate('favorites').exec();
+    if (!user) return res.status(404).send('User not found');
+
+    const files = Array.isArray(user.favorites) ? user.favorites : [];
+    res.render('favorites', { files });
+  } catch (err) {
+    console.error('Error rendering favorites page:', err);
+    res.status(500).send('Server error');
+  }
+});
+
 
 module.exports = router;
