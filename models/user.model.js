@@ -10,15 +10,15 @@ const userSchema = new mongoose.Schema({
     username:{
         type: String,
         required: true,
-        unique : [true , 'this eamil is already in use'],
+        unique : true ,
         trim : true,
-        minlength :[ 3, 'username must be atleast three characters long']
+        minlength :[ 3, 'Username must be atleast three characters long']
     },
     password:{
         type: String,
         required: true,
         trim : true,
-        minlength :[ 6, 'password must be atleast six characters long']
+        minlength :[ 6, 'Password must be atleast six characters long']
     },
   favorites: [{
     type: mongoose.Schema.Types.ObjectId,

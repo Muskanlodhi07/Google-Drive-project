@@ -9,7 +9,7 @@
   </head>
   <body >
 <div class="min-h-screen flex items-center justify-center bg-gray-900">
-  <form 
+  <form id="loginForm"
   action="/user/login" method="POST"
   class="bg-gray-800 p-8 rounded-xl shadow-lg w-full max-w-md space-y-6">
     <div>
@@ -27,6 +27,34 @@
 </div>
 
     <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
-    
+    <script>
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const data = Object.fromEntries(formData);
+
+        try {
+            const response = await fetch('/user/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+
+            alert(result.message);
+
+            if (result.message === "Login successful") {
+                window.location.href = "/user/home"; // redirect
+            }
+        } catch (err) {
+            alert("Something went wrong");
+            console.error(err);
+        }
+    });
+    </script>
+
   </body>
 </html>

@@ -18,38 +18,50 @@ router.get('/register',(req, res) => {
 })
 
 router.post('/register',
-    body('email').trim().isEmail().isLength({min : 13}),
-    body('username').trim().isLength({min:3}),
-    body('password').trim().isLength({ min : 6}),
-    async (req , res)=>{ 
-    
+  body('email').trim().isEmail().isLength({ min: 13 }),
+  body('username').trim().isLength({ min: 3 }),
+  body('password').trim().isLength({ min: 6 }),
+  async (req, res) => {
     const err = validationResult(req);
-
-    if(!err.isEmpty()){
-        return res.status(400).json({
-            errors: err.array(),
-            message: 'Sahi DATA dalo'
-        })
+    if (!err.isEmpty()) {
+      return res.status(400).json({ error: "Validation failed", details: err.array() });
     }
 
-    const {email, username , password} = req.body;
-    const newUser =await userModel.create({
-        
-        email,
-        username,
-        password
-    })
-     const token = jwt.sign({
-        userId : newUser._id ,
+    const { email, username, password } = req.body;
+
+    try {
+      const newUser = await userModel.create({ email, username, password });
+
+      const token = jwt.sign({
+        userId: newUser._id,
         email: newUser.email,
-        username: newUser.username
-     }, process.env.JWT_SECRET)
+        username: newUser.username,
+      }, process.env.JWT_SECRET);
 
-    res.cookie( 'token' , token); 
+      res.cookie('token', token);
+      res.status(200).json({
+        success: true,
+        redirectTo: "/user/home"
+      });
+    } catch (error) {
+      if (error.code === 11000) {
+        const field = Object.keys(error.keyValue)[0];
+        const value = error.keyValue[field];
 
-    res.redirect("/user/home");
-    console.log(newUser);
-})
+        return res.status(400).json({
+          error: "Duplicate",
+          field: field,
+          message: `${field} "${value}" is already in use`,
+        });
+      }
+
+      return res.status(500).json({ error: "Something went wrong", message: error.message });
+    }
+  }
+);
+
+
+
 
 router.get('/login', ( req , res) => {
     res.render("login");
@@ -75,21 +87,23 @@ router.post('/login',
         password : password
     })
 
-    if(!user){
-       return res.status(400).json({
-            message:"username or password is not found"
-        })
-    }
-
-    const token = jwt.sign({
-        userId : user._id,
-        username : user.username,
+    if (!user) {
+    return res.status(401).json({ message: "Invalid credentials" });
+    } else {
+    const token = jwt.sign(
+      {
+        userId: user._id,
+        username: user.username,
         email: user.email,
-    }, process.env.JWT_SECRET)
+      },
+      process.env.JWT_SECRET
+    );
 
-    res.cookie( 'token' , token);
-    
-    res.redirect("/user/home");
+    res.cookie("token", token, { httpOnly: true });
+
+    return res.status(200).json({ message: "Login successful" });
+  }
+
 })
 
 
