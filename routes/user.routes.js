@@ -7,6 +7,8 @@ const jwt = require('jsonwebtoken');
 const multer = require('multer');
 const authMiddleware = require('../middlewares/auth')
 const cloudinary = require ('../config/cloudinary')
+const nodemailer = require('nodemailer');
+
 
 const upload = multer({ storage: multer.memoryStorage() });
 
@@ -116,6 +118,10 @@ router.get('/home', authMiddleware, async (req, res) => {
     user: userForTemplate
   });
 });
+
+router.get('/about',authMiddleware, (req,res)=>{
+  res.render("about");
+})
 
 
 router.get('/recent' ,authMiddleware, async (req , res)=>{
@@ -296,5 +302,36 @@ router.get('/favorite', authMiddleware, async (req, res) => {
   }
 });
 
+router.post('/send-message' , async (req , res)=>{
+  const{ name , email , message} = req.body;
+
+const transporter = nodemailer.createTransport({
+  host: 'smtp.gmail.com',
+  port: 587,
+  secure: false, // true for 465, false for 587
+  auth: {
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_PASS
+  }
+});
+console.log('EMAIL:', process.env.GMAIL_USER);
+console.log('PASS:', process.env.GMAIL_PASS);
+
+
+  const mailOptions = { 
+    from: email,
+    to: process.env.GMAIL_USER,
+    subject: `New message from ${name}`,
+    text: `Message from: ${name} (${email})\n\n${message}`
+  };
+  try{
+    await transporter.sendMail(mailOptions);
+    res.status(200).send('message sent successfully!')
+  }catch(error){
+    console.log(error);
+    res.status(500).send('something went wrong');
+  }
+ console.log(req.body);
+});
 
 module.exports = router;
