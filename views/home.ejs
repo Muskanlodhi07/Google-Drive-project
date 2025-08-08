@@ -197,19 +197,25 @@
             <form action="/user/file-upload"
                     method="post"
                     enctype="multipart/form-data"
+                    id="uploadForm"
                     >
-                    <div class="flex flex-col items-center justify-center ">
-                    <svg xmlns="http://www.w3.org/2000/svg" class=" h-16 w-16 mx-auto text-primary-500 text-[#a20021] mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                    </svg>     
-                        <p class="mb-2 text-sm text-gray-500 dark:text-gray-600"><span class="font-semibold">Click to upload</span> or drag and drop</p>
-                        <p class="text-xs text-gray-500 dark:text-gray-600">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
-                    </div>
-                    <button onclick="upload(event)"
+ 
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="multiple_files">Upload multiple files</label>
+            <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"  id="dropzone-file" name="file" type="file" />
+
+                    <p class="mt-1 text-sm text-red-500 dark:text-gray-300" id="file_input_help">It may take time to upload the file. Please wait for a while!!</p>
+
+                    <button
                     id="browseButton" class="bg-[#a20021] hover:bg-primary-600 text-white font-medium mt-6 py-2 px-6 rounded-full transition-colors shadow-md hover:shadow-lg">
                         Upload Files 
                     </button>
-                    <input id="dropzone-file" name="file" type="file" class="hidden" />
+                    <div id="loadingIndicator" class="hidden mt-4 flex items-center justify-center text-[#a20021]">
+                    <svg class="animate-spin h-5 w-5 mr-3 text-[#a20021]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                    </svg>
+                    Uploading...
+                    </div>
                     </label>
                 </form> 
             </div>
@@ -225,6 +231,9 @@
         </div>
     </section>
 
+    <div class="ml-3">
+    <span class="text-red-500 ">Note : Filenest only support png and jpg format.</span>
+    </div>
     <!-- Main Content -->
     <main class="container mx-auto px-4 py-12">
         <!-- Featured Collections -->
@@ -233,34 +242,44 @@
                 <h2 class="text-2xl font-bold">Featured Collections</h2>
                 <a href="#" class="text-primary-500 hover:text-primary-600 dark:text-primary-400 dark:hover:text-primary-300 font-medium">View All</a>
             </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <%files.forEach(file => { %>
-                <div class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow">
-                    <div class="h-40 bg-gradient-to-r from-[#a20021] to-pink-400 relative">
-                        <!-- Favorite Button -->
-                        <div class="absolute inset-0 flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-white/80" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="p-5">
-                        <h3 class="font-bold text-lg mb-2"><%= file.filename %></h3>
-                        <p class="text-gray-600 dark:text-gray-400 text-sm mb-4"><%= file.uploadedAt %></p>
-                        <a href="<%= file.fileUrl %>" download="file.jpg"  target="_blank"   class="inline-block px-4 py-2 mt-3 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600">Download</a>
-                        <form action="/user/delete-file/<%= file._id %>" method="POST" style="display:inline;">
-                            <button type="submit" onclick="return confirm('Delete this file?')" 
-                            class="px-4 py-2 mt-3 bg-red-600 text-white font-medium rounded-md shadow hover:bg-red-700"
-                            >🗑️ Delete</button>
-                        </form>
-                    </div>   
+                        
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 px-4 mt-8 justify-between items-center">
+            <% files.forEach(file => { 
+
+
+                const isPDF = file.filename.toLowerCase().endsWith('.pdf'); 
+                const resourceType = isPDF ? 'raw' : 'image'; 
+                const extension = isPDF ? '.pdf' : ''; 
+                const fileUrl = `https://res.cloudinary.com/dlptcbgaz/raw/upload/fl_attachment/${file.public_id}`;
+                const fileExtension = file.filename.split('.').pop().toUpperCase();
+                const uploadationTime = String(file.uploadedAt).split('GMT')[0];
+                %>
+                <div class="bg-white rounded-lg shadow-md p-4 flex flex-col items-center">
+
+
+                <% if (isPDF) { %>
+                    <iframe src="<%= fileUrl %>" width="100%" height="300px" class="mb-2 rounded border"></iframe>
+                <% } else { %>
+                    <img src="<%= fileUrl %>" alt="<%= file.fileName %>" class="max-h-[300px] object-contain rounded mb-2">
+                <% } %>
+                <p class="font-semibold m-2"><%= file.fileName %></p>
+                <p class="text-xs text-gray-500 mb-2"><%= uploadationTime %></p>
+                <div class="flex flex-wrap gap-2 justify-center items-center">
+                <a href="<%= fileUrl %>" download="<%= fileUrl %>" class="bg-blue-500 text-white px-3 py-1 rounded mb-1">
+                    Download <%= fileExtension %>
+                </a >
+                <form action="/user/delete-file/<%= file._id %>" method="POST" style="display:inline;">
+                <button type="submit" onclick="return confirm('Delete this file?')" 
+                class="p-1 bg-red-600 text-white font-medium rounded-md shadow hover:bg-red-700"
+                 >Delete</button>
                 </div>
-                <% }) %>
+                </div>
+            <% }); %>
             </div>
+
         </section>
         
-        <!-- Recent Uploads - Pinterest Style -->
+    <!-- Recent Uploads - Pinterest Style -->
         <section>
             <div class="flex items-center mb-8">
                 <h2 class="text-2xl font-bold text-gray-800 text-gray-800">Recent Uploads</h2>
@@ -383,43 +402,54 @@
 
   <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
 
-
 <script>
-async function upload(event) {
-  event.preventDefault(); // prevent reload
+  document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("uploadForm");
+    const loading = document.getElementById("loadingIndicator");
+    const button = document.getElementById("browseButton");
 
-  const file = document.getElementById('dropzone-file').files[0];
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
 
-  if (!file) {
-    alert("Please select a file.");
-    return;
-  }
+      const fileInput = document.getElementById("dropzone-file");
+      const file = fileInput.files[0];
+      if (!file) {
+        alert("Please select a file to upload.");
+        return;
+      }
 
-  const formData = new FormData();
-  formData.append('file', file);
+      // Hide button & show loader
+      button.classList.add("hidden");
+      loading.classList.remove("hidden");
 
-  try {
-    const res = await fetch('/user/file-upload', {
-      method: 'POST',
-      credentials: 'include',
-      body: formData
+      const formData = new FormData();
+      formData.append("file", file);
+
+      try {
+        const response = await fetch("/user/file-upload", {
+          method: "POST",
+          body: formData,
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+          alert("File uploaded successfully!");
+        } else {
+          alert("Upload failed: " + result.message);
+        }
+      } catch (error) {
+        alert("An error occurred: " + error.message);
+      } finally {
+        // Show button & hide loader again
+        button.classList.remove("hidden");
+        loading.classList.add("hidden");
+        form.reset();
+      }
     });
-
-    const data = await res.json();
-
-    if (res.ok) {
-      alert("✅ Upload successful!");
-      window.location.href = "/user/home"; // redirect if needed
-    } else {
-      alert("❌ Upload failed: " + data.message);
-    }
-
-  } catch (error) {
-    alert("❌ Error occurred: " + error.message);
-  }
-}
-
+  });
 </script>
+
+
 
  
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96679284f035bcff',t:'MTc1MzczOTIxOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
@@ -458,6 +488,7 @@ async function upload(event) {
     });
   });
 </script>
+
 
 
 

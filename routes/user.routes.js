@@ -15,12 +15,15 @@ const upload = multer({ storage: multer.memoryStorage() });
 
 router.get('/register',(req, res) => {
     res.render("register");
-})
+});
 
-router.post('/register',
-  body('email').trim().isEmail().isLength({ min: 13 }),
-  body('username').trim().isLength({ min: 3 }),
-  body('password').trim().isLength({ min: 6 }),
+router.post(
+  '/register',
+  [
+    body('email').trim().isEmail().isLength({ min: 13 }),
+    body('username').trim().isLength({ min: 3 }),
+    body('password').trim().isLength({ min: 6 }),
+  ],
   async (req, res) => {
     const err = validationResult(req);
     if (!err.isEmpty()) {
@@ -32,17 +35,21 @@ router.post('/register',
     try {
       const newUser = await userModel.create({ email, username, password });
 
-      const token = jwt.sign({
-        userId: newUser._id,
-        email: newUser.email,
-        username: newUser.username,
-      }, process.env.JWT_SECRET);
+      const token = jwt.sign(
+        {
+          userId: newUser._id,
+          email: newUser.email,
+          username: newUser.username,
+        },
+        process.env.JWT_SECRET
+      );
 
       res.cookie('token', token);
       res.status(200).json({
         success: true,
         redirectTo: "/user/home"
       });
+
     } catch (error) {
       if (error.code === 11000) {
         const field = Object.keys(error.keyValue)[0];
@@ -55,13 +62,11 @@ router.post('/register',
         });
       }
 
+      console.log(error);
       return res.status(500).json({ error: "Something went wrong", message: error.message });
     }
   }
 );
-
-
-
 
 router.get('/login', ( req , res) => {
     res.render("login");
@@ -155,7 +160,6 @@ router.get('/bin', authMiddleware, async (req, res) => {
   res.render('bin', { deletedFiles });
 });
 
-const cloudinaryy= require('../config/cloudinary');
 
 router.post('/file-upload', authMiddleware, upload.single('file'), async (req, res) => {
   try {
@@ -165,10 +169,18 @@ router.post('/file-upload', authMiddleware, upload.single('file'), async (req, r
 
     const result = await new Promise((resolve, reject) => {
       cloudinary.uploader.upload_stream(
-        { resource_type: 'auto' },
+        {
+          filename_override: req.file.originalname, // e.g. "ANAMIKA_LODHI.pdf"
+          use_filename: true,
+          unique_filename: false,
+          resource_type: 'raw',
+          folder: 'user_uploads'  // optional, for organization
+        },
         (error, result) => {
           if (error) return reject(error);
-          return resolve(result);
+        console.log(result);
+        return resolve(result);
+          
         }
       ).end(req.file.buffer);
     });
@@ -177,11 +189,11 @@ router.post('/file-upload', authMiddleware, upload.single('file'), async (req, r
       userId: req.user.userId,
       filename: req.file.originalname,
       fileUrl: result.secure_url,
-      public_id: result.public_id
+      public_id: result.public_id,
+      resource_type: result.resource_type
     });
-
+  
     return res.status(200).json({ message: "Upload successful", url: result.secure_url });
-
   } catch (err) {
     console.error("Upload failed:", err);
     return res.status(500).json({ message: "Upload failed", error: err.message });

@@ -73,7 +73,7 @@
           } else if (data.field === "username") {
             document.getElementById("usernameError").textContent = data.message;
           } else {
-            alert(data.message || "Something went wrong.");
+            alert(data.message || "Invalid Credentials.");
           }
         }
       } catch (err) {
