@@ -13,6 +13,11 @@ const streamifier = require("streamifier");
 const upload = multer({ storage: multer.memoryStorage() });
 
 
+router.get('/', (req, res) => {
+  res.redirect('/user/register');
+});
+
+
 router.get('/register',(req, res) => {
     res.render("register");
 });
@@ -182,7 +187,6 @@ router.post('/file-upload', authMiddleware, upload.single('file'), async (req, r
         },
         (error, result) => {
           if (error) return reject(error);
-        console.log(result);
         return resolve(result);
           
         }
@@ -346,8 +350,6 @@ const transporter = nodemailer.createTransport({
     pass: process.env.GMAIL_PASS
   }
 });
-console.log('EMAIL:', process.env.GMAIL_USER);
-console.log('PASS:', process.env.GMAIL_PASS);
 
 
   const mailOptions = { 
