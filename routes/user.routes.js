@@ -8,7 +8,7 @@ const multer = require('multer');
 const authMiddleware = require('../middlewares/auth')
 const cloudinary = require ('../config/cloudinary')
 const nodemailer = require('nodemailer');
-
+const streamifier = require("streamifier");
 
 const upload = multer({ storage: multer.memoryStorage() });
 
@@ -89,7 +89,6 @@ router.post('/login',
 
     const user = await userModel.findOne({
         username : username,
-        password : password
     })
 
     if (!user) {
@@ -103,6 +102,11 @@ router.post('/login',
       },
       process.env.JWT_SECRET
     );
+
+    const isMatch = await user.comparePassword(password);
+    if (!isMatch) {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
 
     res.cookie("token", token, { httpOnly: true });
 
@@ -199,6 +203,8 @@ router.post('/file-upload', authMiddleware, upload.single('file'), async (req, r
     return res.status(500).json({ message: "Upload failed", error: err.message });
   }
 });
+
+
 
 
 // POST /file/delete/:id

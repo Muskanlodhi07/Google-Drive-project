@@ -181,7 +181,7 @@
                     id="uploadForm"
                     >
  
-            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="multiple_files">Upload multiple files</label>
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="multiple_files">Upload your files</label>
             <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"  id="dropzone-file" name="file" type="file" />
 
                     <p class="mt-1 text-sm text-red-500 dark:text-gray-300" id="file_input_help">It may take time to upload the file. Please wait for a while!!</p>
@@ -221,7 +221,6 @@
         <section class="mb-16">
             <div class="flex justify-between items-center mb-8">
                 <h2 class="text-2xl font-bold">Featured Collections</h2>
-                <a href="#" class="text-primary-500 hover:text-primary-600 dark:text-primary-400 dark:hover:text-primary-300 font-medium">View All</a>
             </div>
                         
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 px-4 mt-8 justify-between items-center">
@@ -243,7 +242,7 @@
                 <% } else { %>
                     <img src="<%= fileUrl %>" alt="<%= file.fileName %>" class="max-h-[300px] object-contain rounded mb-2">
                 <% } %>
-                <p class="font-semibold m-2"><%= file.fileName %></p>
+                <p class="font-semibold m-2"><%= file.filename %></p>
                 <p class="text-xs text-gray-500 mb-2"><%= uploadationTime %></p>
                 <div class="flex flex-wrap gap-2 justify-center items-center">
                 <a href="<%= fileUrl %>" download="<%= fileUrl %>" class="bg-blue-500 text-white px-3 py-1 rounded mb-1">
@@ -380,50 +379,41 @@
   <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
 
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const form = document.getElementById("uploadForm");
-    const loading = document.getElementById("loadingIndicator");
-    const button = document.getElementById("browseButton");
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("uploadForm");
+  const loading = document.getElementById("loadingIndicator");
+  const button = document.getElementById("browseButton");
 
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-      const fileInput = document.getElementById("dropzone-file");
-      const file = fileInput.files[0];
-      if (!file) {
-        alert("Please select a file to upload.");
-        return;
-      }
+    const file = document.getElementById("dropzone-file").files[0];
+    if (!file) return alert("Please select a file.");
 
-      // Hide button & show loader
-      button.classList.add("hidden");
-      loading.classList.remove("hidden");
+    button.classList.add("hidden");
+    loading.classList.remove("hidden");
 
-      const formData = new FormData();
-      formData.append("file", file);
+    const formData = new FormData();
+    formData.append("file", file);
 
-      try {
-        const response = await fetch("/user/file-upload", {
-          method: "POST",
-          body: formData,
-        });
+    try {
+      const response = await fetch("/user/file-upload", {
+        method: "POST",
+        body: formData,
+      });
 
-        const result = await response.json();
-        if (response.ok) {
-          alert("File uploaded successfully!");
-        } else {
-          alert("Upload failed: " + result.message);
-        }
-      } catch (error) {
-        alert("An error occurred: " + error.message);
-      } finally {
-        // Show button & hide loader again
-        button.classList.remove("hidden");
-        loading.classList.add("hidden");
-        form.reset();
-      }
-    });
+      const result = await response.json();
+      alert(result.message);
+      if (result.url) console.log("Uploaded file URL:", result.url);
+    } catch (err) {
+      alert("Upload failed: " + err.message);
+    } finally {
+      button.classList.remove("hidden");
+      loading.classList.add("hidden");
+      form.reset();
+    }
   });
+});
 </script>
 
 
